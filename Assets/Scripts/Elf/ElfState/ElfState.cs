@@ -7,6 +7,7 @@ public class ElfState
     
     // 用来提示当前state变化、及state内部逻辑相关的指示参数
     public float playerXMoveInput;
+    public bool isPlayerJumpInput; // 是否输入跳跃键
 
     public ElfState(ElfController elfController, ElfStateMachine stateMachine, string animBoolName) {
         this.elfController = elfController;

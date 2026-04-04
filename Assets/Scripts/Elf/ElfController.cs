@@ -10,17 +10,22 @@ public class ElfController : MonoBehaviour
     // 相关地图对象
     private Tilemap groundTilemap;
     private Tilemap decorationTilemap;
+    private LayerMask groundLayer;
     
     // 角色子对象判定点
-    private Transform stepTileTransform; // 玩家所踩tile的判定位置对象
+    private Transform stepTileTransform; // 玩家所踩tile的判定位置对象（同时用于地面检测）
     
     // 角色初始设置参数
     public float moveSpeed = 4;
+    public float jumpSpeed = 6;
+    public Vector2 groundCheckSize = new Vector2(0.5f, 0.1f); // 地面检测箱长宽
     
     // 状态相关参数
     private ElfStateMachine stateMachine;
     public ElfIdleState idleState;
     public ElfMoveState moveState;
+    public ElfJumpState jumpState;
+    public ElfAirState airState;
     
     // 运行参数
     private bool isFacingRight = true;
@@ -32,12 +37,15 @@ public class ElfController : MonoBehaviour
 
         groundTilemap = GameObject.Find("Tilemap_Ground").GetComponent<Tilemap>();
         decorationTilemap = GameObject.Find("Tilemap_Decoration").GetComponent<Tilemap>();
+        groundLayer = LayerMask.GetMask("Ground");
         
         stepTileTransform = transform.Find("StepTileTransform");
 
         stateMachine = new ElfStateMachine();
         idleState = new ElfIdleState(this, stateMachine, "idle");
         moveState = new ElfMoveState(this, stateMachine, "move");
+        jumpState = new ElfJumpState(this, stateMachine, "jump");
+        airState = new ElfAirState(this, stateMachine, "air");
     }
     
     private void Start() {
@@ -82,6 +90,7 @@ public class ElfController : MonoBehaviour
     // 在controller每一帧更新时检查玩家输入的各个操作
     private void PlayerInputCheck() {
         stateMachine.currentState.playerXMoveInput = Input.GetAxisRaw("Horizontal");
+        stateMachine.currentState.isPlayerJumpInput = Input.GetKeyDown(KeyCode.Space);
     }
 
     // 计算根据玩家踩踏地面导致的草地进化
@@ -96,6 +105,20 @@ public class ElfController : MonoBehaviour
             TileBase tile = groundTilemap.GetTile(currentCell);
             if (tile is SteppableGrassTile steppableGrass)
                 steppableGrass.OnStepped(currentCell, groundTilemap, decorationTilemap);
+        }
+    }
+
+    // 检测玩家是否位于地面
+    public bool isGrounded() {
+        return Physics2D.OverlapBox(stepTileTransform.position, groundCheckSize, 0f, groundLayer);
+    }
+    
+    // 绘制gizmos，确认地面监测框位置及大小
+    private void OnDrawGizmosSelected() {
+        if (transform.Find("StepTileTransform") != null) {
+            Transform stepPoint = transform.Find("StepTileTransform");
+            Gizmos.color = Color.red; 
+            Gizmos.DrawWireCube(stepPoint.position, groundCheckSize);
         }
     }
 }

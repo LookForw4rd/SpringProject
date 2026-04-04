@@ -10,6 +10,10 @@ public class ElfMoveState : ElfState
         base.Update();
         if (playerXMoveInput == 0) 
             stateMachine.ChangeState(elfController.idleState);
+        if (!elfController.isGrounded())
+            stateMachine.ChangeState(elfController.airState); 
+        if (isPlayerJumpInput && elfController.isGrounded())
+            stateMachine.ChangeState(elfController.jumpState);
         
         elfController.SetVelocity(playerXMoveInput * elfController.moveSpeed, elfController._rigidbody.linearVelocity.y);
     }
