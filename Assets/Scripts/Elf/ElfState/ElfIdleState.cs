@@ -15,6 +15,8 @@ public class ElfIdleState : ElfState
             stateMachine.ChangeState(elfController.airState); 
         if (isPlayerJumpInput && elfController.isGrounded())
             stateMachine.ChangeState(elfController.jumpState);
+        if (isPlayerHoldingItem)
+            stateMachine.ChangeState(elfController.holdingState);
     }
 
     public override void Exit() {

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: cc938a28a80b747468d1c3c8c6c4feaa
+guid: cf45326ff8c8e4f549e4a74f5c94f98c
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -36,7 +36,7 @@ ScriptedImporter:
     spriteMeshType: 1
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
-    spritePixelsToUnits: 8
+    spritePixelsToUnits: 100
     spriteBorder: {x: 0, y: 0, z: 0, w: 0}
     spriteGenerateFallbackPhysicsShape: 0
     generateCubemap: 6
@@ -102,7 +102,7 @@ ScriptedImporter:
     generateIndividualEvents: 1
     generateSpriteAtlas: 1
   importFileNodeState: 1
-  platformSettingsDirtyTick: 639109874802425810
+  platformSettingsDirtyTick: 0
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -127,72 +127,9 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Frame_0
+  - name: plants
     originalName: 
-    pivot: {x: 0.42857146, y: -2.6000001}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    customData: 
-    rect:
-      serializedVersion: 2
-      x: 39
-      y: 4
-      width: 7
-      height: 5
-    spriteID: 9b6faad4a9f8346eb8408119e8167226
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 39, y: 4}
-  - name: Frame_1
-    originalName: 
-    pivot: {x: 0.42857146, y: -2.6000001}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    customData: 
-    rect:
-      serializedVersion: 2
-      x: 39
-      y: 17
-      width: 7
-      height: 5
-    spriteID: 1bc418b4e736a475eab77c117b660087
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 39, y: 17}
-  - name: Frame_2
-    originalName: 
-    pivot: {x: 0.47058824, y: -0.5}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    customData: 
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 37
-      width: 17
-      height: 16
-    spriteID: 3bfa767db618844279c18eecf42b7d1d
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 37}
-  - name: Frame_3
-    originalName: 
-    pivot: {x: 0.4814815, y: -0.12}
+    pivot: {x: 0.58181816, y: -1.509804}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -200,9 +137,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 27
-      height: 25
-    spriteID: deebea451285a4d8abe58bc9cc856055
+      width: 110
+      height: 51
+    spriteID: 47e7098d2d11744da82a1e1423458a78
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -216,84 +153,33 @@ ScriptedImporter:
   asepriteLayers:
   - layerIndex: 0
     uuid:
-      value0: 1306840154
+      value0: 4194513348
       value1: 0
       value2: 0
       value3: 0
     guid: 0
-    name: grit
+    name: plants
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Frame_0
+    - name: plants
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 13
-        y: 13
-        width: 7
-        height: 5
-      spriteId: 9b6faad4a9f8346eb8408119e8167226
-    - name: Frame_1
-      frameIndex: 1
-      additiveSortOrder: 0
-      cellRect:
-        x: 13
-        y: 13
-        width: 7
-        height: 5
-      spriteId: 1bc418b4e736a475eab77c117b660087
-    - name: Frame_2
-      frameIndex: 2
-      additiveSortOrder: 0
-      cellRect:
-        x: 8
-        y: 8
-        width: 17
-        height: 16
-      spriteId: 3bfa767db618844279c18eecf42b7d1d
-    - name: Frame_3
-      frameIndex: 3
-      additiveSortOrder: 0
-      cellRect:
-        x: 3
-        y: 3
-        width: 27
-        height: 25
-      spriteId: deebea451285a4d8abe58bc9cc856055
+        x: 0
+        y: 77
+        width: 110
+        height: 51
+      spriteId: 47e7098d2d11744da82a1e1423458a78
     linkedCells: []
     tileCells: []
     tileSetIndex: 0
     parentIndex: -1
   tileSets: []
-  platformSettings:
-  - name: DefaultTexturePlatform
-    overridden: 0
-    ignorePlatformSupport: 0
-    maxTextureSize: 16384
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    androidETC2FallbackOverride: 0
-  - name: Standalone
-    overridden: 0
-    ignorePlatformSupport: 0
-    maxTextureSize: 16384
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    androidETC2FallbackOverride: 0
+  platformSettings: []
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 32, y: 32}
-  previousTextureSize: {x: 64, y: 64}
+  canvasSize: {x: 128, y: 128}
+  previousTextureSize: {x: 128, y: 64}

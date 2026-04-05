@@ -14,6 +14,7 @@ public class ElfController : MonoBehaviour
     
     // 角色子对象判定点
     private Transform stepTileTransform; // 玩家所踩tile的判定位置对象（同时用于地面检测）
+    private Transform holdItemTransform; // 玩家握持物品时物品的位置（及持有）子对象
     
     // 角色初始设置参数
     public float moveSpeed = 4;
@@ -26,10 +27,16 @@ public class ElfController : MonoBehaviour
     public ElfMoveState moveState;
     public ElfJumpState jumpState;
     public ElfAirState airState;
+    public ElfHoldingState holdingState;
+    public ElfHoldingMoveState holdingMoveState;
+    public ElfHoldingJumpState holdingJumpState;
+    public ElfHoldingAirState holdingAirState;
+    public ElfInteractState interactState;
     
     // 运行参数
     private bool isFacingRight = true;
     private Vector3Int lastSteppedTile = new Vector3Int(int.MaxValue, int.MaxValue, int.MaxValue); // 保存玩家上一次踩过的tile，防止不动时重复计算tile的成长
+    public IHoldable currentHeldItem = null; // 当前玩家正在握持的物品接口
     
     private void Awake() {
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -40,12 +47,18 @@ public class ElfController : MonoBehaviour
         groundLayer = LayerMask.GetMask("Ground");
         
         stepTileTransform = transform.Find("StepTileTransform");
+        holdItemTransform = transform.Find("HoldItemTransform");
 
         stateMachine = new ElfStateMachine();
         idleState = new ElfIdleState(this, stateMachine, "idle");
         moveState = new ElfMoveState(this, stateMachine, "move");
         jumpState = new ElfJumpState(this, stateMachine, "jump");
         airState = new ElfAirState(this, stateMachine, "air");
+        holdingState = new ElfHoldingState(this, stateMachine, "hold");
+        holdingMoveState = new ElfHoldingMoveState(this, stateMachine, "hold_move");
+        holdingJumpState = new ElfHoldingJumpState(this, stateMachine, "hold_jump");
+        holdingAirState = new ElfHoldingAirState(this, stateMachine, "hold_air");
+        interactState = new ElfInteractState(this, stateMachine, "interact");
     }
     
     private void Start() {
@@ -54,6 +67,7 @@ public class ElfController : MonoBehaviour
 
     private void Update() {
         PlayerInputCheck();
+        stateMachine.currentState.isPlayerHoldingItem = currentHeldItem != null;
         stateMachine.currentState.Update();
     }
 
@@ -91,6 +105,7 @@ public class ElfController : MonoBehaviour
     private void PlayerInputCheck() {
         stateMachine.currentState.playerXMoveInput = Input.GetAxisRaw("Horizontal");
         stateMachine.currentState.isPlayerJumpInput = Input.GetKeyDown(KeyCode.Space);
+        if (Input.GetKeyDown(KeyCode.J)) PlayerTryToInteract(); // 按下j键（交互键）时玩家尝试进行与周围环境、握持物品的互动
     }
 
     // 计算根据玩家踩踏地面导致的草地进化
@@ -120,5 +135,35 @@ public class ElfController : MonoBehaviour
             Gizmos.color = Color.red; 
             Gizmos.DrawWireCube(stepPoint.position, groundCheckSize);
         }
+    }
+
+    // 玩家所有点击交互后的可能交互行为的判定
+    private void PlayerTryToInteract() {
+        if (currentHeldItem == null) {
+            GetGravelFromTile(); // 检测是否能从脚底的gravel tile获取gravel
+        }
+        else {
+            currentHeldItem.OnInteracted(); // 和握持的物品发生交互
+            stateMachine.currentState.isPlayerStartInteract = true;
+        }
+    }
+    
+    // 玩家从脚下的沙砾tile中获取沙砾item的判定交互方法
+    private void GetGravelFromTile() {
+        Vector3 hitPosition = stepTileTransform.position;
+        Vector3Int currentCell = groundTilemap.WorldToCell(hitPosition);
+        TileBase tileUnderFeet = groundTilemap.GetTile(currentCell);
+
+        if (tileUnderFeet is GravelTile gravelTile) {
+            GameObject gravelItem = gravelTile.GenerateGravelItem(holdItemTransform);
+            IHoldable holdable = gravelItem.GetComponent<IHoldable>();
+            currentHeldItem = holdable;
+            currentHeldItem.OnPickedUp(holdItemTransform);
+        }
+    }
+
+    // 当前状态动画播放完毕后调取此方法通知状态
+    public void SetCurrentClipFinished() {
+        stateMachine.currentState.isCurrentClipFinished = true;
     }
 }

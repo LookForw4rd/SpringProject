@@ -1,6 +1,6 @@
-public class ElfAirState : ElfState
+public class ElfHoldingAirState : ElfState
 {
-    public ElfAirState(ElfController elfController, ElfStateMachine stateMachine, string animBoolName) : base(elfController, stateMachine, animBoolName) { }
+    public ElfHoldingAirState(ElfController elfController, ElfStateMachine stateMachine, string animBoolName) : base(elfController, stateMachine, animBoolName) { }
 
     public override void Enter() {
         base.Enter();
@@ -12,9 +12,9 @@ public class ElfAirState : ElfState
             elfController.SetVelocity(playerXMoveInput * elfController.moveSpeed, elfController._rigidbody.linearVelocity.y);
         
         if (elfController.isGrounded())
-            stateMachine.ChangeState(elfController.idleState);
-        if (isPlayerHoldingItem)
             stateMachine.ChangeState(elfController.holdingState);
+        if (isPlayerStartInteract)
+            stateMachine.ChangeState(elfController.interactState);
     }
 
     public override void Exit() {

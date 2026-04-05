@@ -12,6 +12,8 @@ public class ElfJumpState : ElfState
         
         if (elfController._rigidbody.linearVelocity.y < 0)
             stateMachine.ChangeState(elfController.airState);
+        if (isPlayerHoldingItem)
+            stateMachine.ChangeState(elfController.holdingState);
     }
 
     public override void Exit() {
