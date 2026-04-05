@@ -37,7 +37,8 @@ public class ElfController : MonoBehaviour
     private bool isFacingRight = true;
     private Vector3Int lastSteppedTile = new Vector3Int(int.MaxValue, int.MaxValue, int.MaxValue); // 保存玩家上一次踩过的tile，防止不动时重复计算tile的成长
     public IHoldable currentHeldItem = null; // 当前玩家正在握持的物品接口
-    
+    public Vector2 currentWindForce { get; private set; } // 当前承受的风力
+
     private void Awake() {
         _rigidbody = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
@@ -71,6 +72,10 @@ public class ElfController : MonoBehaviour
         stateMachine.currentState.Update();
     }
 
+    private void FixedUpdate() {
+        SetWindForceY();
+    }
+
     private void OnCollisionStay2D(Collision2D collision) {
         CalculateGrassStep(collision);
     }
@@ -83,8 +88,20 @@ public class ElfController : MonoBehaviour
 
     // 设置玩家rigidbody速度
     public void SetVelocity(float xVelocity, float yVelocity) {
-        _rigidbody.linearVelocity = new Vector2(xVelocity, yVelocity);
+        // 计算当前经过风力加持后的x轴速度
+        float windMultiplier = (currentHeldItem != null) ? currentHeldItem.GetWindForceMultiplier() : 1f;
+        float finalXVelocity = xVelocity + (currentWindForce.x * windMultiplier);
+        
+        _rigidbody.linearVelocity = new Vector2(finalXVelocity, yVelocity);
         FlipController(xVelocity);
+    }
+
+    // 在每一帧检测风的纵向风力，当存在风力时施加纵向力
+    private void SetWindForceY() {
+        if (currentWindForce.y != 0) {
+            float windMultiplier = (currentHeldItem != null) ? currentHeldItem.GetWindForceMultiplier() : 1f;
+            _rigidbody.AddForce(new Vector2(0, currentWindForce.y * windMultiplier), ForceMode2D.Force);
+        }
     }
 
     // 玩家角色转身检测方法，在给予玩家速度时检测速度方向和朝向是否违背，如果违背则进行转身
@@ -165,5 +182,10 @@ public class ElfController : MonoBehaviour
     // 当前状态动画播放完毕后调取此方法通知状态
     public void SetCurrentClipFinished() {
         stateMachine.currentState.isCurrentClipFinished = true;
+    }
+
+    // 当气孔为玩家提供风力时调用此方式进行风力信息置入
+    public void ApplyWindForce(Vector2 windForce) {
+        currentWindForce = windForce;
     }
 }

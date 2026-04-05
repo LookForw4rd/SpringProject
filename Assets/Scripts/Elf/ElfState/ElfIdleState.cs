@@ -4,7 +4,7 @@ public class ElfIdleState : ElfState
 
     public override void Enter() {
         base.Enter();
-        elfController.SetVelocity(0, 0);
+        elfController.SetVelocity(0, elfController._rigidbody.linearVelocity.y);
     }
 
     public override void Update() {
@@ -17,6 +17,8 @@ public class ElfIdleState : ElfState
             stateMachine.ChangeState(elfController.jumpState);
         if (isPlayerHoldingItem)
             stateMachine.ChangeState(elfController.holdingState);
+        
+        elfController.SetVelocity(0, elfController._rigidbody.linearVelocity.y);
     }
 
     public override void Exit() {
