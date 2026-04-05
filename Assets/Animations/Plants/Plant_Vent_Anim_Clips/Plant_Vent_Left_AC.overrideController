@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Plant_Vent_Left_AC
+  m_Controller: {fileID: 9100000, guid: b47f31dfe7ffa4e9fb95e36ed0938362, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: ca8ef23d762224dc593b46d38aba5c0e, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: cde4d4117137749308a6c9f945d07fac, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 9efec4b6c563842c39ff3b8b6bdb87fb, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 2728a549b7c3047f18bb4869c1f0abe6, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 32bf43bb7a47f4557be1cc8b8b2d678c, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 4800d1272fb2b49b7a56f2cceab434a4, type: 2}
