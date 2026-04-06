@@ -45,7 +45,7 @@ public class ElfController : MonoBehaviour
 
         groundTilemap = GameObject.Find("Tilemap_Ground").GetComponent<Tilemap>();
         decorationTilemap = GameObject.Find("Tilemap_Decoration").GetComponent<Tilemap>();
-        groundLayer = LayerMask.GetMask("Ground");
+        groundLayer = LayerMask.GetMask("Ground") | LayerMask.GetMask("Plant");
         
         stepTileTransform = transform.Find("StepTileTransform");
         holdItemTransform = transform.Find("HoldItemTransform");

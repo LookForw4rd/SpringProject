@@ -14,7 +14,7 @@ TagManager:
   - Tilemap
   - Player
   - Ground
-  - 
+  - Plant
   - 
   - 
   - 
@@ -41,11 +41,14 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Tilemap
-    uniqueID: 269702989
-    locked: 0
   - name: Player
     uniqueID: 132644637
+    locked: 0
+  - name: Plant
+    uniqueID: 3099736819
+    locked: 0
+  - name: Tilemap
+    uniqueID: 269702989
     locked: 0
   m_RenderingLayers:
   - Default
