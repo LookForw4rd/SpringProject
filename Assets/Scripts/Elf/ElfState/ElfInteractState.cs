@@ -12,6 +12,8 @@ public class ElfInteractState : ElfState
             stateMachine.ChangeState(elfController.idleState);
         if (isCurrentClipFinished && !elfController.isGrounded())
             stateMachine.ChangeState(elfController.airState);
+        
+        elfController.SetVelocity(0, elfController._rigidbody.linearVelocity.y);
     }
 
     public override void Exit() {

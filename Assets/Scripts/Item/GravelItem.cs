@@ -27,4 +27,8 @@ public class GravelItem : MonoBehaviour, IHoldable
     public void DestroyItemAfterInteract() {
         Destroy(gameObject);
     }
+
+    public float GetWindForceMultiplier() {
+        return 1f;
+    }
 }
