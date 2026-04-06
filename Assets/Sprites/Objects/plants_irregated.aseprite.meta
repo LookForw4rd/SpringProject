@@ -739,7 +739,7 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: plants_irregated_50
     originalName: 
-    pivot: {x: 0.5, y: 0.36363637}
+    pivot: {x: 0.5, y: 0.45}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -886,15 +886,15 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: plants_irregated_67
     originalName: 
-    pivot: {x: 0.36363637, y: 0.44444445}
+    pivot: {x: 0.226209, y: 0.44837105}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
     rect:
       serializedVersion: 2
-      x: 84
+      x: 86
       y: 70
-      width: 11
+      width: 9
       height: 9
     spriteID: e6e6b140d49784b7783fc56d556d9ce3
     spriteBone: []
