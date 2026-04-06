@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Plant_Leaf_Down_AC
+  m_Controller: {fileID: 9100000, guid: 00f11685acf3b4ea8a1393aa25b461b9, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 7dd8be6680e6f4d0aa9b1e132ddcbbc7, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 932d1a1cdee894d8c851e8c6f8a3390a, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 9a38247ebc05043ab9dd80dc4473a170, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: a52a9182e0a0e453ca9bdb5fbfef56db, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 96bfffe2e904544649518dd05bb02d96, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 154c1179cc7e44141a8e6bcfc86b8cb0, type: 2}
