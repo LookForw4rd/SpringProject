@@ -259,6 +259,7 @@ public class ElfController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha8))
             tutorialText.PlayMoveTutorial();
     }
+
     // 给玩家施加一次纵向抬升，用于花朵等“跃升”交互效果
     public void ApplyVerticalBoost(float boostSpeed) {
         float nextY = Mathf.Max(_rigidbody.linearVelocity.y, boostSpeed);
