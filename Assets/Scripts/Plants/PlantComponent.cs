@@ -1,5 +1,10 @@
 using UnityEngine;
 
+public enum PlantInteractionType {
+    Water,
+    Grit
+}
+
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Collider2D))] 
 // 所有植物组件的基类
@@ -51,8 +56,8 @@ public class PlantComponent : MonoBehaviour
         }
     }
 
-    /// 预留给子类（气孔、花朵）的局部交互接口
-    public virtual void OnLocalInteract(string itemType) {
+    /// 预留给子类的局部交互接口
+    public virtual void OnLocalInteract(PlantInteractionType interactionType) {
         // 基类不实现具体交互，仅供功能组件重写
     }
 }

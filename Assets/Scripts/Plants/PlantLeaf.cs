@@ -19,11 +19,11 @@ public class PlantLeaf : PlantComponent
         }
 
         // 叶子独有的碰撞体处理逻辑
-        if (immediate){
+        if (immediate) {
             // 瞬间切换
             ToggleColliders(isIrrigated);
         }
-        else{
+        else {
             // 如果是正常生长，我们希望在 Growing 动画开始时就切换，或者在动画帧里精准控制
             // 这里先做简单的状态同步
             ToggleColliders(isIrrigated);

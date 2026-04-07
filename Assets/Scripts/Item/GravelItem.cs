@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.XR;
+using System.Collections.Generic;
 
 public class GravelItem : MonoBehaviour, IHoldable
 {
@@ -34,16 +34,7 @@ public class GravelItem : MonoBehaviour, IHoldable
 
     private void HandleGravelEffect() {
         _isInteracted = true;
-
-        // 1. 范围探测：寻找周围的 PlantCore
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, effectRadius);
-        foreach (var hit in hitColliders) {
-            // 尝试获取 PlantCore 组件（包括父级，防止碰撞体在子物体上）
-            PlantCore core = hit.GetComponentInParent<PlantCore>();
-            if (core != null) {
-                core.InteractWithGrit(); 
-            }
-        }
+        TriggerPlantInteraction(PlantInteractionType.Grit);
 
         // 2. 播放动画
         if (_animator != null) {
@@ -51,6 +42,18 @@ public class GravelItem : MonoBehaviour, IHoldable
             _animator.SetTrigger("interact"); // 触发交互/消失动画
         } else {
             DestroyItemAfterInteract();
+        }
+    }
+
+    private void TriggerPlantInteraction(PlantInteractionType interactionType) {
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, effectRadius);
+        HashSet<PlantComponent> targets = new HashSet<PlantComponent>();
+
+        foreach (var hit in hitColliders) {
+            PlantComponent plantComp = hit.GetComponentInParent<PlantComponent>();
+            if (plantComp != null && targets.Add(plantComp)) {
+                plantComp.OnLocalInteract(interactionType);
+            }
         }
     }
 

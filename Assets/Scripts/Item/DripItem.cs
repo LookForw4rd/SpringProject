@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class DripItem : MonoBehaviour, IHoldable
 {
@@ -62,14 +63,7 @@ public class DripItem : MonoBehaviour, IHoldable
         if (_isInteracted) {
             return; // 已经在销毁过程中
         }
-        Collider2D[] hitCores = Physics2D.OverlapCircleAll(transform.position, effectRadius);
-        foreach (var hit in hitCores) {
-            // Debug.Log($"[探测中] 撞到了物体: {hit.name}，层级是: {LayerMask.LayerToName(hit.gameObject.layer)}");
-            PlantCore core = hit.GetComponent<PlantCore>();
-            if (core != null) {
-                core.InteractWithWater();
-            }
-        }
+        TriggerPlantInteraction(PlantInteractionType.Water);
         _isInteracted = true;
         _isPendingDestroy = true; // 锁定销毁状态，防止被拾取
         if (_animator != null) {
@@ -78,6 +72,18 @@ public class DripItem : MonoBehaviour, IHoldable
         } 
         else {
             DestroyItemAfterInteract();
+        }
+    }
+
+    private void TriggerPlantInteraction(PlantInteractionType interactionType) {
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, effectRadius);
+        HashSet<PlantComponent> targets = new HashSet<PlantComponent>();
+
+        foreach (var hit in hitColliders) {
+            PlantComponent plantComp = hit.GetComponentInParent<PlantComponent>();
+            if (plantComp != null && targets.Add(plantComp)) {
+                plantComp.OnLocalInteract(interactionType);
+            }
         }
     }
     // 由动画事件 (Animation Event) 在最后一帧调用
@@ -99,4 +105,3 @@ public class DripItem : MonoBehaviour, IHoldable
         Gizmos.DrawWireSphere(transform.position, effectRadius);
     }
 }
-

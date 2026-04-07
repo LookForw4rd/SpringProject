@@ -17,11 +17,11 @@ public class PlantVent : PlantComponent
     // [SerializeField] private ParticleSystem waterParticle;
 
     // 重写交互接口，响应玩家行动（例如玩家带着某种物品按 J）
-    public override void OnLocalInteract(string itemType) {
-        if (itemType == "drip") {
+    public override void OnLocalInteract(PlantInteractionType interactionType) {
+        if (interactionType == PlantInteractionType.Water) {
             SetMode(VentMode.Water);
         }
-        else if (itemType == "grit") {
+        else if (interactionType == PlantInteractionType.Grit) {
             SetMode(VentMode.Air);
         }
     }
