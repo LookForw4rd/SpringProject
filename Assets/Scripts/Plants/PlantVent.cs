@@ -12,8 +12,8 @@ public class PlantVent : PlantComponent
     [Tooltip("风力强度")]
     [SerializeField] private float windForce = 10f;
 
-    // [Header("视觉/物理引用")]
-    // [SerializeField] private ParticleSystem airParticle;
+    [Header("视觉/物理引用")]
+    [SerializeField] private ParticleSystem airParticle;
     // [SerializeField] private ParticleSystem waterParticle;
 
     // 重写交互接口，响应玩家行动（例如玩家带着某种物品按 J）
@@ -79,6 +79,19 @@ public class PlantVent : PlantComponent
     }
 
     private void UpdateParticles(){
-        // 粒子逻辑...
+        if (airParticle == null) return;
+
+        // 只有在湿润状态，且当前模式为 Air 时，才播放风粒子
+        bool shouldPlayAir = isIrrigated && currentMode == VentMode.Air;
+
+        if (shouldPlayAir && !airParticle.isPlaying) {
+            airParticle.Play();
+        } 
+        else if (!shouldPlayAir && airParticle.isPlaying) {
+            // Stop 可以让粒子不再产生新的，但已经存在的粒子会自然飘完生命周期，视觉过渡平滑
+            airParticle.Stop(); 
+        }
+
+        // 针对 waterParticle 也可以写一套类似的逻辑
     }
 }
