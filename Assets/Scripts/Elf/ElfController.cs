@@ -38,7 +38,10 @@ public class ElfController : MonoBehaviour
     private bool isFacingRight = true;
     private Vector3Int lastSteppedTile = new Vector3Int(int.MaxValue, int.MaxValue, int.MaxValue); // 保存玩家上一次踩过的tile，防止不动时重复计算tile的成长
     public IHoldable currentHeldItem = null; // 当前玩家正在握持的物品接口
-    public Vector2 currentWindForce { get; private set; } // 当前承受的风力
+    private Vector2 currentWindForce; // 当前承受的风力
+    
+    // 关联object & component
+    private TutorialTextEffect tutorialText;
 
     private void Awake() {
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -61,6 +64,8 @@ public class ElfController : MonoBehaviour
         holdingJumpState = new ElfHoldingJumpState(this, stateMachine, "hold_jump");
         holdingAirState = new ElfHoldingAirState(this, stateMachine, "hold_air");
         interactState = new ElfInteractState(this, stateMachine, "interact");
+
+        tutorialText = FindAnyObjectByType<TutorialTextEffect>();
     }
     
     private void Start() {
@@ -69,6 +74,7 @@ public class ElfController : MonoBehaviour
 
     private void Update() {
         PlayerInputCheck();
+        TestInput();
         stateMachine.currentState.isPlayerHoldingItem = currentHeldItem != null;
         stateMachine.currentState.Update();
     }
@@ -211,5 +217,11 @@ public class ElfController : MonoBehaviour
     // 当气孔为玩家提供风力时调用此方式进行风力信息置入
     public void ApplyWindForce(Vector2 windForce) {
         currentWindForce = windForce;
+    }
+
+    // 测试相关逻辑的临时输入检测
+    private void TestInput() {
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+            tutorialText.PlayMoveTutorial();
     }
 }
