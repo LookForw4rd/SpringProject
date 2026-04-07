@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System.Collections.Generic;
 
 public class ElfController : MonoBehaviour
 {
@@ -180,7 +181,9 @@ public class ElfController : MonoBehaviour
                 Debug.Log("捡起了最近的物件");
             }
             else {
-                GetGravelFromTile(); // 检测是否能从脚底的gravel tile获取gravel    
+                if (!GetFlowerFromNearby(colliders)) {
+                    GetGravelFromTile(); // 最后检测是否能从脚底的gravel tile获取gravel
+                }
             }
         }
         else {
@@ -203,6 +206,38 @@ public class ElfController : MonoBehaviour
         }
     }
 
+    private bool GetFlowerFromNearby(Collider2D[] nearbyColliders) {
+        PlantFlower nearestFlower = null;
+        float minDistance = float.MaxValue;
+        HashSet<PlantFlower> visitedFlowers = new HashSet<PlantFlower>();
+
+        foreach (var col in nearbyColliders) {
+            PlantFlower flower = col.GetComponentInParent<PlantFlower>();
+            if (flower == null || !flower.gameObject.activeInHierarchy || !visitedFlowers.Add(flower)) {
+                continue;
+            }
+
+            float dist = Vector2.Distance(transform.position, flower.transform.position);
+            if (dist < minDistance) {
+                minDistance = dist;
+                nearestFlower = flower;
+            }
+        }
+
+        if (nearestFlower == null) {
+            return false;
+        }
+
+        if (!nearestFlower.TryHarvest(holdItemTransform, out IHoldable flowerItem)) {
+            return false;
+        }
+
+        currentHeldItem = flowerItem;
+        currentHeldItem.OnPickedUp(holdItemTransform);
+        Debug.Log("采摘并握持了花朵");
+        return true;
+    }
+
     // 当前状态动画播放完毕后调取此方法通知状态
     public void SetCurrentClipFinished() {
         stateMachine.currentState.isCurrentClipFinished = true;
@@ -211,5 +246,11 @@ public class ElfController : MonoBehaviour
     // 当气孔为玩家提供风力时调用此方式进行风力信息置入
     public void ApplyWindForce(Vector2 windForce) {
         currentWindForce = windForce;
+    }
+
+    // 给玩家施加一次纵向抬升，用于花朵等“跃升”交互效果
+    public void ApplyVerticalBoost(float boostSpeed) {
+        float nextY = Mathf.Max(_rigidbody.linearVelocity.y, boostSpeed);
+        _rigidbody.linearVelocity = new Vector2(_rigidbody.linearVelocity.x, nextY);
     }
 }
