@@ -9,11 +9,23 @@ public class ElfHoldingJumpState : ElfState
 
     public override void Update() {
         base.Update();
-        
-        if (elfController._rigidbody.linearVelocity.y < 0)
-            stateMachine.ChangeState(elfController.holdingAirState);
-        if (isPlayerStartInteract)
+        if (!isPlayerHoldingItem) {
+            if (elfController._rigidbody.linearVelocity.y < 0) {
+                stateMachine.ChangeState(elfController.airState);
+            } else {
+                stateMachine.ChangeState(elfController.jumpState);
+            }
+            return;
+        }
+
+        if (isPlayerStartInteract) {
             stateMachine.ChangeState(elfController.interactState);
+            return;
+        }
+        if (elfController._rigidbody.linearVelocity.y < 0) {
+            stateMachine.ChangeState(elfController.holdingAirState);
+            return;
+        }
     }
 
     public override void Exit() {

@@ -20,6 +20,7 @@ public class ElfController : MonoBehaviour
     public float moveSpeed = 4;
     public float jumpSpeed = 6;
     public Vector2 groundCheckSize = new Vector2(0.5f, 0.1f); // 地面检测箱长宽
+    public float itemCheckRadius = 0.5f; // 检测可握持物件（目前只有水珠和花朵）的半径
     
     // 状态相关参数
     private ElfStateMachine stateMachine;
@@ -157,7 +158,30 @@ public class ElfController : MonoBehaviour
     // 玩家所有点击交互后的可能交互行为的判定
     private void PlayerTryToInteract() {
         if (currentHeldItem == null) {
-            GetGravelFromTile(); // 检测是否能从脚底的gravel tile获取gravel
+            // 优先判定：检测周围是否有掉落的 IHoldable 物品（如水珠） 
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, itemCheckRadius);
+            IHoldable nearestItem = null;
+            float minDistance = float.MaxValue;
+
+            foreach (var col in colliders) {
+                IHoldable holdable = col.GetComponent<IHoldable>();
+                if (holdable != null && col.gameObject.activeInHierarchy) {
+                    float dist = Vector2.Distance(transform.position, col.transform.position);
+                    if (dist < minDistance) {
+                        minDistance = dist;
+                        nearestItem = holdable;
+                    }
+                }
+            }
+            if (nearestItem != null) {
+                // 捡起最近的物件
+                currentHeldItem = nearestItem;
+                currentHeldItem.OnPickedUp(holdItemTransform);
+                Debug.Log("捡起了最近的物件");
+            }
+            else {
+                GetGravelFromTile(); // 检测是否能从脚底的gravel tile获取gravel    
+            }
         }
         else {
             currentHeldItem.OnInteracted(); // 和握持的物品发生交互

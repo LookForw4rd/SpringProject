@@ -8,13 +8,30 @@ public class ElfHoldingAirState : ElfState
 
     public override void Update() {
         base.Update();
+        if (!isPlayerHoldingItem) {
+            if (elfController.isGrounded()) {
+                if (playerXMoveInput != 0) {
+                    stateMachine.ChangeState(elfController.moveState);
+                } else {
+                    stateMachine.ChangeState(elfController.idleState);
+                }
+            } else {
+                stateMachine.ChangeState(elfController.airState);
+            }
+            return;
+        }
+
+        if (isPlayerStartInteract) {
+            stateMachine.ChangeState(elfController.interactState);
+            return;
+        }
+        if (elfController.isGrounded()) {
+            stateMachine.ChangeState(elfController.holdingState);
+            return;
+        }
+
         if (playerXMoveInput != 0)
             elfController.SetVelocity(playerXMoveInput * elfController.moveSpeed, elfController._rigidbody.linearVelocity.y);
-        
-        if (elfController.isGrounded())
-            stateMachine.ChangeState(elfController.holdingState);
-        if (isPlayerStartInteract)
-            stateMachine.ChangeState(elfController.interactState);
     }
 
     public override void Exit() {

@@ -10,10 +10,10 @@ public class PlantCore : PlantComponent
     // 对外接口：唤醒整棵植株
     public void InteractWithWater()
     {
-        // 1. 改变核心自己的状态（继承自基类）
+        // 改变核心自己的状态（继承自基类）
         SetState(true);
 
-        // 2. 指挥所有连接的组件变湿润
+        // 指挥所有连接的组件变湿润
         foreach (var comp in connectedComponents)
         {
             if (comp != null)

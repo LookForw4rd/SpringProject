@@ -15,7 +15,7 @@ TagManager:
   - Player
   - Ground
   - Plant
-  - 
+  - Item
   - 
   - 
   - 
@@ -43,6 +43,9 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 132644637
+    locked: 0
+  - name: Item
+    uniqueID: 1017674141
     locked: 0
   - name: Plant
     uniqueID: 3099736819
