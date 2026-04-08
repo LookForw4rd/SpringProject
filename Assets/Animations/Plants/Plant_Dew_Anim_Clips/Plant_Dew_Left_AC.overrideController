@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Plant_Dew_Left_AC
+  m_Controller: {fileID: 9100000, guid: 1a2d590873c6f4707945479d28dda554, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: b46217d048b5c4e9e9af24fa77c7da0d, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: ea7e1369471874f8ab2f329ffac15d32, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 335ce0d9cd65a4abcb2676d4c3c2a381, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: f4d684ec0e1e0490ab59fd3400128a71, type: 2}
