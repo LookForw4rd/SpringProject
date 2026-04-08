@@ -25,10 +25,8 @@ public class PlantCore : PlantComponent
         SetState(isWet);
 
         // 指挥所有连接的组件变湿润/干瘪
-        foreach (var comp in connectedComponents)
-        {
-            if (comp != null)
-            {
+        foreach (var comp in connectedComponents) {
+            if (comp != null) {
                 comp.SetState(isWet);
             }
         }
