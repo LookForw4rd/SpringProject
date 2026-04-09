@@ -8,7 +8,7 @@ public class SteppableGrassTile : Tile
     public Sprite[] tileSprites; // 草坪的四种形态对应sprite
     public TileBase[] decorationTiles; // 在地面上长的装饰性草tile
     [Range(0f, 1f)]public float spawnChance = 0.4f; // groundTile上方草的生成可能
-    private static Dictionary<Vector3Int, int> steppableGrassRecords = new Dictionary<Vector3Int, int>(); // 记录地图中所有能够生长的草坪的信息
+    public static Dictionary<Vector3Int, int> steppableGrassRecords = new Dictionary<Vector3Int, int>(); // 记录地图中所有能够生长的草坪的信息
 
     // 重新运行游戏时防止steppableGrasRecords信息未被完全清空
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]

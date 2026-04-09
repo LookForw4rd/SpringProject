@@ -43,6 +43,7 @@ public class ElfController : MonoBehaviour
     
     // 关联object & component
     private TutorialTextEffect tutorialText;
+    private ElfSoundEffect soundEffect;
 
     private void Awake() {
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -67,6 +68,8 @@ public class ElfController : MonoBehaviour
         interactState = new ElfInteractState(this, stateMachine, "interact");
 
         tutorialText = FindAnyObjectByType<TutorialTextEffect>();
+        soundEffect = FindAnyObjectByType<ElfSoundEffect>();
+        soundEffect.sfxAudioSource = GetComponent<AudioSource>();
     }
     
     private void Start() {
@@ -264,5 +267,26 @@ public class ElfController : MonoBehaviour
     public void ApplyVerticalBoost(float boostSpeed) {
         float nextY = Mathf.Max(_rigidbody.linearVelocity.y, boostSpeed);
         _rigidbody.linearVelocity = new Vector2(_rigidbody.linearVelocity.x, nextY);
+    }
+
+    // 播放当前的踩地音效，在移动的animation中调用
+    public void PlayFootstepSound() {
+        if (!isGrounded()) return;
+        Vector3 hitPosition = stepTileTransform.position;
+        Vector3Int currentCell = groundTilemap.WorldToCell(hitPosition);
+        TileBase tileUnderFeet = groundTilemap.GetTile(currentCell); // 获取当前脚下tile类型
+        FootstepType type = FootstepType.Dirt;
+
+        if (tileUnderFeet is SteppableGrassTile) {
+            int currentStep;
+            SteppableGrassTile.steppableGrassRecords.TryGetValue(currentCell, out currentStep);
+            if (currentStep > 1)
+                type = FootstepType.Grass;
+            else
+                type = FootstepType.Dirt;
+        }
+        else if (tileUnderFeet is GravelTile)
+            type = FootstepType.Dirt;
+        soundEffect.PlayFootstepSound(type);
     }
 }

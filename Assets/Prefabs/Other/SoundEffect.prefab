@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2771769161057766174
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4197920992893547964}
+  - component: {fileID: 6094096346514265633}
+  m_Layer: 0
+  m_Name: SoundEffect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4197920992893547964
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2771769161057766174}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.87588, y: -1.40683, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6094096346514265633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2771769161057766174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba1b523629dc24b75aa2dcee36c70b1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElfSoundEffect
+  sfxAudioSource: {fileID: 0}
+  dirtStepClips:
+  - {fileID: 8300000, guid: c0f310f42afe548b98bf32a416e9c61b, type: 3}
+  - {fileID: 8300000, guid: f1f58329d717c4fbd926636c2d3f0896, type: 3}
+  - {fileID: 8300000, guid: 9dbb47c247c48491b8f3dc4cc26427e9, type: 3}
+  - {fileID: 8300000, guid: 08dec54213fa24403bba474e9a7cdbb2, type: 3}
+  - {fileID: 8300000, guid: 21f9019971dd7461794f852dcc9272c2, type: 3}
+  - {fileID: 8300000, guid: 200ebbcee422241e082b844953e5dfaa, type: 3}
+  - {fileID: 8300000, guid: 48350dc363c5241689f0d3a5bc83e008, type: 3}
+  - {fileID: 8300000, guid: 92d5cee84810b438c892d647fa983140, type: 3}
+  grassStepClips:
+  - {fileID: 8300000, guid: a7d49eebd21e445f79e957676e1a33ca, type: 3}
+  - {fileID: 8300000, guid: 04b4f4db188b8425082099c043fa2072, type: 3}
+  - {fileID: 8300000, guid: 8114ba70b562c47a9b5c1ab64399ecef, type: 3}
+  - {fileID: 8300000, guid: 3eb9a6d8f695d41c9b287e4fb57b6daf, type: 3}
+  - {fileID: 8300000, guid: 31c7ff3afdbbb4e9484a4bd3a2ace325, type: 3}
+  - {fileID: 8300000, guid: fe3e121605f9543d98e077beeb6e3b22, type: 3}
+  - {fileID: 8300000, guid: c1b2309cb51344d39a0242ea1b5a00b0, type: 3}
+  - {fileID: 8300000, guid: 0a2de108bf734483b9253d048cc3b3c4, type: 3}
+  minStepPitch: 0.9
+  maxStepPitch: 1.1
