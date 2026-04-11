@@ -42,12 +42,14 @@ public class SpiralGrass : MonoBehaviour, CanActivateByCore
             animator.SetBool("no_leaf", true);
             return flyLeafObj;
         }
-        else {
+        else if (currentState == SpiralGrassState.NoLeaf) {
             // 直接获取植株
             GameObject spiralGrassObj = Instantiate(spiralGrass, holdPoint.position, Quaternion.identity);
             Destroy(gameObject);
             return spiralGrassObj;
         }
+
+        return null;
     }
 
     public void IrrigatedByDrip() {

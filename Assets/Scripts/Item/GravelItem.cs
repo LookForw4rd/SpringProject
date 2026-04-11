@@ -54,6 +54,10 @@ public class GravelItem : MonoBehaviour, IHoldable
             if (plantComp != null && targets.Add(plantComp)) {
                 plantComp.OnLocalInteract(interactionType);
             }
+
+            InflatePlant inflatePlant = hit.GetComponent<InflatePlant>();
+            if (inflatePlant != null)
+                inflatePlant.DryByGravel();
         }
     }
 
