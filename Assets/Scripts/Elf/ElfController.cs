@@ -22,6 +22,8 @@ public class ElfController : MonoBehaviour
     public float jumpSpeed = 6;
     public Vector2 groundCheckSize = new Vector2(0.5f, 0.1f); // 地面检测箱长宽
     public float itemCheckRadius = 0.5f; // 检测可握持物件（目前只有水珠和花朵）的半径
+    [Header("能力解锁")]
+    [SerializeField] private bool isGrassGrowthUnlocked = false; // 踩地生长草地能力，默认关闭，后续由剧情/收集解锁
     
     // 状态相关参数
     private ElfStateMachine stateMachine;
@@ -135,6 +137,7 @@ public class ElfController : MonoBehaviour
 
     // 计算根据玩家踩踏地面导致的草地进化
     private void CalculateGrassStep(Collision2D collision) {
+        if (!isGrassGrowthUnlocked) return;
         if (collision.gameObject != groundTilemap.gameObject) return;
         
         Vector3 hitPosition = stepTileTransform.position;
@@ -264,5 +267,22 @@ public class ElfController : MonoBehaviour
     public void ApplyVerticalBoost(float boostSpeed) {
         float nextY = Mathf.Max(_rigidbody.linearVelocity.y, boostSpeed);
         _rigidbody.linearVelocity = new Vector2(_rigidbody.linearVelocity.x, nextY);
+    }
+
+    // 对外暴露：用于剧情事件/收集物触发解锁
+    public void UnlockGrassGrowthAbility() {
+        SetGrassGrowthAbility(true);
+    }
+
+    // 对外暴露：用于读档/重置时同步能力状态
+    public void SetGrassGrowthAbility(bool unlocked) {
+        if (isGrassGrowthUnlocked == unlocked) return;
+        isGrassGrowthUnlocked = unlocked;
+        // 状态切换后重置记录，防止切换瞬间踩踏判定被旧值吞掉
+        lastSteppedTile = new Vector3Int(int.MaxValue, int.MaxValue, int.MaxValue);
+    }
+
+    public bool IsGrassGrowthUnlocked() {
+        return isGrassGrowthUnlocked;
     }
 }
