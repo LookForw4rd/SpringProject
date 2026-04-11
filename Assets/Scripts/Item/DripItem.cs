@@ -84,6 +84,10 @@ public class DripItem : MonoBehaviour, IHoldable
             if (plantComp != null && targets.Add(plantComp)) {
                 plantComp.OnLocalInteract(interactionType);
             }
+
+            CanActivateByCore plant = hit.GetComponent<CanActivateByCore>();
+            if (plant != null) 
+                plant.IrrigatedByDrip();
         }
     }
     // 由动画事件 (Animation Event) 在最后一帧调用

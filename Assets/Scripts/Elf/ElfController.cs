@@ -190,9 +190,9 @@ public class ElfController : MonoBehaviour
                 Debug.Log("捡起了最近的物件");
             }
             else {
-                if (!GetFlowerFromNearby(colliders)) {
-                    GetGravelFromTile(); // 最后检测是否能从脚底的gravel tile获取gravel
-                }
+                if (GetFlyLeafFromSpiralGrass(colliders)) return;
+                if (GetFlowerFromNearby(colliders)) return;
+                GetGravelFromTile(); // 最后检测是否能从脚底的gravel tile获取gravel
             }
         }
         else {
@@ -213,6 +213,33 @@ public class ElfController : MonoBehaviour
             currentHeldItem = holdable;
             currentHeldItem.OnPickedUp(holdItemTransform);
         }
+    }
+    
+    // 玩家从螺旋槽SpiralGrass获得飞叶子item
+    private bool GetFlyLeafFromSpiralGrass(Collider2D[] nearbyColliders) {
+        foreach (var collider in nearbyColliders) {
+            SpiralGrass spiralGrass = collider.GetComponent<SpiralGrass>();
+            if (spiralGrass == null) continue;
+            SpiralGrass.SpiralGrassState state = spiralGrass.currentState;
+            GameObject obj = spiralGrass.ElfInteract(holdItemTransform); // 此处的obj可能是leaf或者grass
+            
+            if (obj == null) continue;
+
+            if (obj.GetComponent<FlyLeafItem>() != null) { // 拿起leaf的情况
+                FlyLeafItem flyLeaf = obj.GetComponent<FlyLeafItem>();
+                currentHeldItem = flyLeaf;
+                flyLeaf.OnPickedUp(holdItemTransform);
+                return true;
+            } 
+            if (obj.GetComponent<SpiralGrassItem>() != null) { // 拿起grass的情况
+                SpiralGrassItem spiralGrassItem = obj.GetComponent<SpiralGrassItem>();
+                currentHeldItem = spiralGrassItem;
+                spiralGrassItem.OnPickedUp(holdItemTransform);
+                spiralGrassItem.SetSprite(transform, state);
+                return true;
+            }
+        }
+        return false;
     }
 
     private bool GetFlowerFromNearby(Collider2D[] nearbyColliders) {
