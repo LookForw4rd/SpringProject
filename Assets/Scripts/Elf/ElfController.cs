@@ -45,6 +45,7 @@ public class ElfController : MonoBehaviour
     
     // 关联object & component
     private TutorialTextEffect tutorialText;
+    private ElfSoundEffect soundEffect;
 
     private void Awake() {
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -69,6 +70,8 @@ public class ElfController : MonoBehaviour
         interactState = new ElfInteractState(this, stateMachine, "interact");
 
         tutorialText = FindAnyObjectByType<TutorialTextEffect>();
+        soundEffect = FindAnyObjectByType<ElfSoundEffect>();
+        soundEffect.sfxAudioSource = GetComponent<AudioSource>();
     }
     
     private void Start() {
@@ -190,9 +193,9 @@ public class ElfController : MonoBehaviour
                 Debug.Log("捡起了最近的物件");
             }
             else {
-                if (!GetFlowerFromNearby(colliders)) {
-                    GetGravelFromTile(); // 最后检测是否能从脚底的gravel tile获取gravel
-                }
+                if (GetFlyLeafFromSpiralGrass(colliders)) return;
+                if (GetFlowerFromNearby(colliders)) return;
+                GetGravelFromTile(); // 最后检测是否能从脚底的gravel tile获取gravel
             }
         }
         else {
@@ -213,6 +216,33 @@ public class ElfController : MonoBehaviour
             currentHeldItem = holdable;
             currentHeldItem.OnPickedUp(holdItemTransform);
         }
+    }
+    
+    // 玩家从螺旋槽SpiralGrass获得飞叶子item
+    private bool GetFlyLeafFromSpiralGrass(Collider2D[] nearbyColliders) {
+        foreach (var collider in nearbyColliders) {
+            SpiralGrass spiralGrass = collider.GetComponent<SpiralGrass>();
+            if (spiralGrass == null) continue;
+            SpiralGrass.SpiralGrassState state = spiralGrass.currentState;
+            GameObject obj = spiralGrass.ElfInteract(holdItemTransform); // 此处的obj可能是leaf或者grass
+            
+            if (obj == null) continue;
+
+            if (obj.GetComponent<FlyLeafItem>() != null) { // 拿起leaf的情况
+                FlyLeafItem flyLeaf = obj.GetComponent<FlyLeafItem>();
+                currentHeldItem = flyLeaf;
+                flyLeaf.OnPickedUp(holdItemTransform);
+                return true;
+            } 
+            if (obj.GetComponent<SpiralGrassItem>() != null) { // 拿起grass的情况
+                SpiralGrassItem spiralGrassItem = obj.GetComponent<SpiralGrassItem>();
+                currentHeldItem = spiralGrassItem;
+                spiralGrassItem.OnPickedUp(holdItemTransform);
+                spiralGrassItem.SetSprite(transform, state);
+                return true;
+            }
+        }
+        return false;
     }
 
     private bool GetFlowerFromNearby(Collider2D[] nearbyColliders) {
@@ -267,6 +297,27 @@ public class ElfController : MonoBehaviour
     public void ApplyVerticalBoost(float boostSpeed) {
         float nextY = Mathf.Max(_rigidbody.linearVelocity.y, boostSpeed);
         _rigidbody.linearVelocity = new Vector2(_rigidbody.linearVelocity.x, nextY);
+    }
+
+    // 播放当前的踩地音效，在移动的animation中调用
+    public void PlayFootstepSound() {
+        if (!isGrounded()) return;
+        Vector3 hitPosition = stepTileTransform.position;
+        Vector3Int currentCell = groundTilemap.WorldToCell(hitPosition);
+        TileBase tileUnderFeet = groundTilemap.GetTile(currentCell); // 获取当前脚下tile类型
+        FootstepType type = FootstepType.Dirt;
+
+        if (tileUnderFeet is SteppableGrassTile) {
+            int currentStep;
+            SteppableGrassTile.steppableGrassRecords.TryGetValue(currentCell, out currentStep);
+            if (currentStep > 1)
+                type = FootstepType.Grass;
+            else
+                type = FootstepType.Dirt;
+        }
+        else if (tileUnderFeet is GravelTile)
+            type = FootstepType.Dirt;
+        soundEffect.PlayFootstepSound(type);
     }
 
     // 对外暴露：用于剧情事件/收集物触发解锁
