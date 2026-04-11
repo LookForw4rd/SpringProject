@@ -6,6 +6,9 @@ public class PlantCore : PlantComponent
     [Header("联动组件列表")]
     // 将这棵植株所属的所有枝干、叶子、功能组件放入此列表
     public List<PlantComponent> connectedComponents = new List<PlantComponent>();
+    
+    // 新组件使用CanActivateByCore作为基类
+    public List<CanActivateByCore> canActivatePlants = new List<CanActivateByCore>();
 
     public override void OnLocalInteract(PlantInteractionType interactionType)
     {
@@ -30,5 +33,7 @@ public class PlantCore : PlantComponent
                 comp.SetState(isWet);
             }
         }
+        foreach (var comp in canActivatePlants) 
+            comp.ActivatedByCore();
     }
 }
