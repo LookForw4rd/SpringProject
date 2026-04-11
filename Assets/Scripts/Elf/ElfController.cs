@@ -42,6 +42,7 @@ public class ElfController : MonoBehaviour
     private Vector3Int lastSteppedTile = new Vector3Int(int.MaxValue, int.MaxValue, int.MaxValue); // 保存玩家上一次踩过的tile，防止不动时重复计算tile的成长
     public IHoldable currentHeldItem = null; // 当前玩家正在握持的物品接口
     private Vector2 currentWindForce; // 当前承受的风力
+    private float bounceLockTimer = 0f;
     
     // 关联object & component
     private TutorialTextEffect tutorialText;
@@ -79,6 +80,8 @@ public class ElfController : MonoBehaviour
     }
 
     private void Update() {
+        if (bounceLockTimer > 0f)   bounceLockTimer -= Time.deltaTime;
+        
         PlayerInputCheck();
         TestInput();
         stateMachine.currentState.isPlayerHoldingItem = currentHeldItem != null;
@@ -99,14 +102,24 @@ public class ElfController : MonoBehaviour
             lastSteppedTile = new Vector3Int(int.MaxValue, int.MaxValue, int.MaxValue);
     }
 
+    // 当玩家被inflate plant反弹时使用此方法施加反弹
+    public void ApplyBounce(Vector2 bounceVelocity, float lockTime = 0.2f) {
+        _rigidbody.linearVelocity = bounceVelocity;
+        bounceLockTimer = lockTime;
+    }
+
     // 设置玩家rigidbody速度
     public void SetVelocity(float xVelocity, float yVelocity) {
         // 计算当前经过风力加持后的x轴速度
         float windMultiplier = (currentHeldItem != null) ? currentHeldItem.GetWindForceMultiplier() : 1f;
         float finalXVelocity = xVelocity + (currentWindForce.x * windMultiplier);
         
+        if (bounceLockTimer > 0)
+            finalXVelocity = _rigidbody.linearVelocity.x;
+        else 
+            FlipController(xVelocity);
+        
         _rigidbody.linearVelocity = new Vector2(finalXVelocity, yVelocity);
-        FlipController(xVelocity);
     }
 
     // 在每一帧检测风的纵向风力，当存在风力时施加纵向力
@@ -194,6 +207,7 @@ public class ElfController : MonoBehaviour
             }
             else {
                 if (GetFlyLeafFromSpiralGrass(colliders)) return;
+                if (GetInflatePlantItem(colliders)) return;
                 if (GetFlowerFromNearby(colliders)) return;
                 GetGravelFromTile(); // 最后检测是否能从脚底的gravel tile获取gravel
             }
@@ -241,6 +255,22 @@ public class ElfController : MonoBehaviour
                 spiralGrassItem.SetSprite(transform, state);
                 return true;
             }
+        }
+        return false;
+    }
+    
+    // 从1*1的inflate plant处将其作为item拿起
+    private bool GetInflatePlantItem(Collider2D[] nearbyColliders) {
+        foreach (var collider in nearbyColliders) {
+            InflatePlant inflatePlant = collider.GetComponent<InflatePlant>();
+            if (inflatePlant == null || inflatePlant.currentState != InflatePlant.InflatePlantState.BeforeInflate) continue;
+            
+            GameObject inflatePlantObj = inflatePlant.ElfInteract(holdItemTransform);
+            InflatePlantItem inflatePlantItem = inflatePlantObj.GetComponent<InflatePlantItem>();
+            currentHeldItem = inflatePlantItem;
+            inflatePlantItem.OnPickedUp(holdItemTransform);
+            inflatePlantItem.SetElfTransform(transform);
+            return true;
         }
         return false;
     }
