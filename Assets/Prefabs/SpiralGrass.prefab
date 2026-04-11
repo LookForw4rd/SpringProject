@@ -84,7 +84,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 616237841600811273, guid: 7f3d480a201a54af2b632e908afe3180, type: 3}
+  m_Sprite: {fileID: 6985978180422855722, guid: 61ada0770b2c645ef8499999a02d140e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -130,6 +130,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpiralGrass
   flyLeaf: {fileID: 3632157125077644732, guid: 563df6f1246f64cce8b3096fe18dd4f8, type: 3}
   spiralGrass: {fileID: 301103396438880848, guid: a84887f26de22471e980ddd7305fab5a, type: 3}
+  currentState: 0
 --- !u!61 &7480146465124294378
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -167,8 +168,8 @@ BoxCollider2D:
   m_Offset: {x: 0.068485975, y: 0.55292106}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
-    oldSize: {x: 1, y: 1}
+    pivot: {x: 0.5263158, y: 0}
+    oldSize: {x: 1.1875, y: 0.625}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

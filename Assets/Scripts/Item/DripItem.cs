@@ -80,7 +80,8 @@ public class DripItem : MonoBehaviour, IHoldable
         HashSet<PlantComponent> targets = new HashSet<PlantComponent>();
 
         foreach (var hit in hitColliders) {
-            PlantComponent plantComp = hit.GetComponentInParent<PlantComponent>();
+            // 只命中真正挂有 PlantComponent 的物体，避免 EffectArea 这类子触发器误触发 Core
+            PlantComponent plantComp = hit.GetComponent<PlantComponent>();
             if (plantComp != null && targets.Add(plantComp)) {
                 plantComp.OnLocalInteract(interactionType);
             }
